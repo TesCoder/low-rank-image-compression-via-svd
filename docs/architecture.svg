@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+  <defs>
+    <style>
+      .title { font: 700 26px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b1220; }
+      .subtitle { font: 400 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #334155; }
+      .label { font: 600 14px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b1220; }
+      .text { font: 400 13px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; fill: #0b1220; }
+      .muted { fill: #475569; }
+      .box { fill: #ffffff; stroke: #0f172a; stroke-width: 2; rx: 14; }
+      .boxSoft { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 14; }
+      .boxBlue { fill: #eff6ff; stroke: #1d4ed8; stroke-width: 2; rx: 14; }
+      .boxGreen { fill: #ecfdf5; stroke: #047857; stroke-width: 2; rx: 14; }
+      .arrow { stroke: #0f172a; stroke-width: 2.5; fill: none; marker-end: url(#arrowHead); }
+      .arrowSoft { stroke: #334155; stroke-width: 2; fill: none; marker-end: url(#arrowHeadSoft); }
+      .dash { stroke-dasharray: 6 6; }
+    </style>
+
+    <marker id="arrowHead" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#0f172a" />
+    </marker>
+    <marker id="arrowHeadSoft" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto">
+      <path d="M 0 0 L 12 6 L 0 12 z" fill="#334155" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect x="0" y="0" width="1200" height="720" fill="#ffffff" />
+
+  <!-- Header -->
+  <text x="60" y="70" class="title">Low-rank image compression via SVD - architecture</text>
+  <text x="60" y="95" class="subtitle">CLI runner + importable helpers + reproducible outputs (screenshots) + tests/CI</text>
+
+  <!-- Entry points -->
+  <rect x="60" y="130" width="1080" height="80" class="boxSoft" />
+  <text x="90" y="165" class="label">Entry points</text>
+  <text x="90" y="190" class="text muted">CLI: <tspan font-weight="600">run.sh</tspan> / <tspan font-weight="600">svd_image_analysis.py</tspan> | Python API: <tspan font-weight="600">image_compression.py</tspan></text>
+
+  <!-- Runner -->
+  <rect x="60" y="250" width="520" height="220" class="boxBlue" />
+  <text x="90" y="285" class="label">Runner - <tspan font-weight="600">svd_image_analysis.py</tspan> (CLI)</text>
+  <text x="90" y="315" class="text">- Parses flags: dataset, k-range, output dir, stable filenames</text>
+  <text x="90" y="338" class="text">- Loads images: Olivetti (scikit-learn) or synthetic (offline)</text>
+  <text x="90" y="361" class="text">- Computes curves (mean L1 error + energy captured)</text>
+  <text x="90" y="384" class="text">- Builds rank-k panel and saves PNGs</text>
+
+  <!-- Core helpers -->
+  <rect x="620" y="250" width="520" height="220" class="box" />
+  <text x="650" y="285" class="label">Core helpers - <tspan font-weight="600">image_compression.py</tspan> (importable)</text>
+  <text x="650" y="315" class="text">- <tspan font-weight="600">svd_reconstruct(M, k)</tspan>: best rank-k approximation</text>
+  <text x="650" y="338" class="text">- <tspan font-weight="600">compute_avg_energy_frac</tspan>: error + energy vs k</text>
+  <text x="650" y="361" class="text">- <tspan font-weight="600">l1_error</tspan>: mean L1 metric</text>
+  <text x="650" y="384" class="text">- <tspan font-weight="600">load_image</tspan>: optional grayscale loader for your files</text>
+
+  <!-- Artifacts + verification -->
+  <rect x="60" y="510" width="1080" height="170" class="boxGreen" />
+  <text x="90" y="545" class="label">Artifacts + verification</text>
+  <text x="90" y="575" class="text">- <tspan font-weight="600">screenshots/</tspan>: curated PNGs embedded in README (generated with <tspan font-weight="600">--no-timestamp</tspan>)</text>
+  <text x="90" y="598" class="text">- <tspan font-weight="600">output/</tspan>: local/generated outputs (gitignored)</text>
+  <text x="90" y="621" class="text">- <tspan font-weight="600">tests/</tspan>: pytest unit tests for helpers (no network required)</text>
+  <text x="90" y="644" class="text">- <tspan font-weight="600">CI</tspan>: GitHub Actions runs pytest on push/PR</text>
+
+  <!-- Arrows -->
+  <path d="M 600 210 L 320 250" class="arrow" />
+  <path d="M 600 210 L 880 250" class="arrowSoft" />
+
+  <path d="M 580 350 L 620 350" class="arrow" />
+  <text x="520" y="340" class="subtitle">calls helpers</text>
+
+  <path d="M 320 470 L 320 510" class="arrowSoft" />
+  <text x="195" y="505" class="subtitle">writes PNGs</text>
+
+  <path d="M 880 470 L 880 510" class="arrowSoft" />
+  <text x="785" y="505" class="subtitle">tested by pytest/CI</text>
+
+  <!-- Footer note -->
+  <text x="60" y="705" class="subtitle">Tip: use --dataset synthetic for fully offline runs; use --no-timestamp for stable screenshot filenames.</text>
+</svg>
+

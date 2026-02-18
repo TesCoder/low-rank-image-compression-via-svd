@@ -1,60 +1,99 @@
-# Low-Rank-Image-Compression-via-SVD
+# Low-rank image compression via SVD
 
+This repo demonstrates **low-rank image compression** using **Singular Value Decomposition (SVD)**.
 
-This tool provides image compression analysis using Singular Value Decomposition (SVD). It utilizes the Olivetti faces dataset by default, but can be adapted for any image input. The analysis demonstrates the relationship between mean L1 reconstruction error, the amount of energy captured at different values of k, and the resulting visual quality.
+It visualizes the tradeoff between:
+- **reconstruction error** (mean L1 per pixel), and
+- **energy captured** (fraction of \(\|M\|_F^2\) explained by the top-\(k\) singular values),
+as you vary the rank \(k\).
 
-## Setup
+It also produces a **rank-\(k\) panel** showing how visual quality changes as you keep more singular values.
+
+## Example outputs
+
+![Average error + energy curves](screenshots/olivetti_curves_img33.png)
+
+![Rank-k panel](screenshots/olivetti_rank_k_img33.png)
+
+## Quickstart
+
+Requirements: **Python 3.12+**
+
+```bash
+bash run.sh
+```
+
+This runs **fully offline** (synthetic dataset) and writes PNGs to `output/`.
+
+## Install (manual)
 
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-
-# or single line
-python3 -m venv .venv && source .venv/bin/activate && pip install --upgrade pip && pip install -r requirements.txt
-
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
 ```
 
-## Dependencies (from `.venv`)
+## Run
 
-```
-contourpy==1.3.3
-cycler==0.12.1
-fonttools==4.61.1
-joblib==1.5.3
-kiwisolver==1.4.9
-matplotlib==3.10.8
-numpy==2.4.2
-packaging==26.0
-pillow==12.1.1
-pyparsing==3.3.2
-python-dateutil==2.9.0.post0
-scikit-learn==1.8.0
-scipy==1.17.0
-six==1.17.0
-threadpoolctl==3.6.0
+### Default (Olivetti faces)
+
+```bash
+python svd_image_analysis.py --output-dir output
 ```
 
-## Usage
+Notes:
+- `--dataset olivetti` is the default and **may download the dataset** on first run.
+- Output filenames include a timestamp unless you pass `--no-timestamp`.
 
-- Core helpers (importable):
-  - **`load_image(path)`** — Load grayscale (or RGB→grayscale) as 2D float array in `[0, 1]`.
-  - **`svd_reconstruct(M, k)`** — Best rank-*k* approximation of `M`.
-  - **`l1_error(M, A)`** — Mean L1 reconstruction error between `M` and `A`.
-  - **`compute_avg_energy_frac(k_vals, images)`** — Avg L1 error + avg energy fraction over a list of images.
+### Fully offline (synthetic)
 
-- Notebook-style runner (saves PNGs, no GUI):  
-  ```bash
-  python svd_image_analysis.py
-  ```
-  - Saves curves to `output/olivetti_curves_img33_<timestamp>.png`.
-  - Saves rank-k panel to `output/olivetti_rankk_img33_<timestamp>.png` (defaults: image idx 33, k = 5,10,20,30).
+```bash
+python svd_image_analysis.py --dataset synthetic --output-dir output --no-timestamp
+```
 
-- Quick example (programmatic):
-  ```python
-  from image_compression import load_image, svd_reconstruct, l1_error
-  img = load_image("photo.jpg")
-  reconstructed = svd_reconstruct(img, k=50)
-  print("L1 error:", l1_error(img, reconstructed))
-  ```
+### Generate stable screenshots for the README
+
+```bash
+python svd_image_analysis.py --dataset olivetti --output-dir screenshots --no-timestamp
+```
+
+## Importable API
+
+```python
+from image_compression import load_image, svd_reconstruct, l1_error
+
+img = load_image("photo.jpg")
+reconstructed = svd_reconstruct(img, k=50)
+print("L1 error:", l1_error(img, reconstructed))
+```
+
+## Architecture diagram
+
+<img src="docs/architecture.svg" alt="Architecture diagram" width="900" />
+
+## Notes on storage
+
+For an \(m \times n\) image:
+- Full storage is \(mn\) values.
+- A rank-\(k\) SVD approximation stores about \(k(m+n+1)\) values.
+
+## Energy captured vs visual quality
+
+“Energy captured” (percentage of \(\|M\|_F^2\)) is a useful summary statistic, but it does **not** perfectly track perceptual quality. That’s why the repo includes both the curves **and** a rank-\(k\) visual panel.
+
+## Project structure
+
+```
+.
+├─ image_compression.py      # importable helpers
+├─ svd_image_analysis.py     # CLI runner (writes PNGs)
+├─ requirements.txt
+├─ tests/
+├─ screenshots/              # curated images embedded in README
+└─ output/                   # local/generated outputs (gitignored)
+```
+
+## License
+
+MIT. See `LICENSE`.
